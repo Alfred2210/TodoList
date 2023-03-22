@@ -3,12 +3,20 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const listSchema = new Schema({
-    User: {
+    userId: {
+        type: Number,
+        required: true,
+    },
+    name: {
         type: String,
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
     },
 })
 
-const User = mongoose.model('List', listSchema)
+const List = mongoose.model('List', listSchema)
 
-module.exports = User
+module.exports = List
