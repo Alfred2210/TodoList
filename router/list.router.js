@@ -1,12 +1,11 @@
-const express = require('express')
-
-const router = express.Router()
+const router = require('express').Router()
+const authorization = require('../middlewares/authorization.mid')
 const User = require('../models/user.model')
 const List = require('../models/list.model')
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', authorization, async (req, res) => {
     try {
-        const lists = await List.find({ user: req.user._id })
+        const lists = await List.find({ user: req.userId })
         res.send(lists)
     } catch (error) {
         return res.status(500).send(error)

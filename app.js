@@ -1,7 +1,7 @@
 const express = require('express')
 require('dotenv').config()
 require('./db')
-const userRouter = require('./router/auth.router')
+const authRouter = require('./router/auth.router')
 const listRouter = require('./router/list.router')
 const todoRouter = require('./router/todo.router')
 
@@ -12,9 +12,17 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use('/users', userRouter)
-app.use('/lists', listRouter)
-app.use('/todos', todoRouter)
+app.use('/auth', authRouter)
+app.use('/list', listRouter)
+// app.use('/todo', todoRouter)
+
+app.use((err, req, res, next) => {
+    res.status(500).json({ message: err.message })
+})
+
+app.use((req, res) => {
+    res.status(404).json({ message: 'not found : check the url !' })
+})
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
