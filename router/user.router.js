@@ -3,47 +3,69 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user.model')
 
-router.get('/', (req, res) => {
-    User.find({}, (err, users) => {
-        if (err) {
-            return res.status(500).send(err)
-        }
+router.get('/', async (req, res) => {
+    try {
+        const users = await User.find()
         res.send(users)
-    })
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
-router.get('/:userId', (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
-        if (err) {
-            return res.status(500).send(err)
-        }
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
         if (!user) {
-            return res.status(404).send('User not found')
+            res.status(404).send('User not found')
         }
+
         res.send(user)
-    })
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
-router.post('/', (req, res) => {
-    const user = new User(req.body)
-    user.save((err, user) => {
-        if (err) {
-            return res.status(500).send(err)
-        }
-        res.status(201).send(user);
-    });
+router.post('/', async (req, res) => {
+    try {
+        const user = new User(req.body)
+        await user.save()
+        res.status(201).send(user)
+    } catch (error) {
+        res.status(500).send(error)
+    }
 })
 
-router.put('/:userId', (req, res) => {
-    User.findByIdAndUpdate(
-        req.params.userId,
-        req.body,
-        { new: true },
-        (err, user) => {
-            if (err) return res.status(500).send(err)
-            res.send(user)
-        }
-    )
+router.patch('/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        })
+        if (!user) return res.status(404).send('User not found')
+        res.send(user)
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
+router.put('/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.userId, req.body, {
+            new: true,
+        })
+        if (!user) return res.status(404).send('User not found')
+        res.send(user)
+    } catch (err) {
+        res.status(500).send(err)
+    }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.userId)
+        if (!user) return res.status(404).send('User not found')
+        res.send(user)
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+})
 module.exports = router
