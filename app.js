@@ -1,7 +1,7 @@
 const express = require('express')
 require('dotenv').config()
 require('./db')
-const userRouter = require('./router/user.router')
+const userRouter = require('./router/auth.router')
 const listRouter = require('./router/list.router')
 const todoRouter = require('./router/todo.router')
 

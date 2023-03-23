@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const todoSchema = new Schema({
-    list: {
+    listId: {
         type: Schema.Types.ObjectId,
         ref: 'List',
         required: true,

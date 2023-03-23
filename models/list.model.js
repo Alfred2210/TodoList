@@ -6,7 +6,7 @@ const listSchema = new Schema({
     name: {
         type: String,
     },
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,
