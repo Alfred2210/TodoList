@@ -3,9 +3,11 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const todoSchema = new Schema({
+    name: {
+        type: String,
+    },
     date: {
         type: Date,
-        required: true,
     },
     listId: {
         type: Schema.Types.ObjectId,

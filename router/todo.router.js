@@ -14,7 +14,8 @@ router.get('/:listId', authorization, async (req, res) => {
 router.post('/:listId', authorization, async (req, res) => {
     try {
         const todo = new Todo({
-            date: req.body.date,
+            name: req.body.name,
+            date: new Date(),
             listId: req.params.listId,
         })
 
