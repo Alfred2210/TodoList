@@ -5,7 +5,7 @@ const List = require('../models/list.model')
 
 router.get('/:userId', authorization, async (req, res) => {
     try {
-        const lists = await List.find({ user: req.userId })
+        const lists = await List.find({ userId: req.params.userId })
         res.send(lists)
     } catch (error) {
         return res.status(500).send(error)
@@ -16,7 +16,7 @@ router.get('/:userId/:listId', async (req, res) => {
     try {
         const list = await List.findOne({
             _id: req.params.listId,
-            user: req.params.userId,
+            userId: req.params.userId,
         })
         if (!list) return res.status(404).send('List not found')
         return res.send(list)
@@ -32,7 +32,7 @@ router.post('/:userId', async (req, res) => {
 
         const list = new List({
             name: req.body.name,
-            user: req.params.userId,
+            userId: req.params.userId,
         })
 
         await list.save()
@@ -45,7 +45,7 @@ router.post('/:userId', async (req, res) => {
 router.put('/:userId/:listId', async (req, res) => {
     try {
         const list = await List.findOneAndUpdate(
-            { _id: req.params.listId, user: req.params.userId },
+            { _id: req.params.listId, userId: req.params.userId },
             req.body,
             { new: true }
         )
@@ -60,7 +60,7 @@ router.delete('/:userId/:listId', async (req, res) => {
     try {
         const list = await List.findOneAndDelete({
             _id: req.params.listId,
-            user: req.params.userId,
+            userId: req.params.userId,
         })
         if (!list) return res.status(404).send('List not found')
         res.send(list)
